@@ -1,8 +1,12 @@
+'use client';
+
 import Container from '@/common/config/container';
-import { Grid, Box, Pagination } from '@mui/material';
+import { Grid } from '@mui/material';
 import NewsItem from '../common/components/NewsItem';
+import { useGetLatestNews } from '../common/hooks/useGetLatestNews';
 
 const ListNews = () => {
+  const { listLatestNews } = useGetLatestNews({});
   return (
     <Container
       sx={{
@@ -16,13 +20,12 @@ const ListNews = () => {
       }}
     >
       <Grid container columnSpacing={4} rowSpacing={4}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((it) => (
-          <Grid key={it} item md={4}>
-            <NewsItem />
+        {listLatestNews?.map((it) => (
+          <Grid key={it.id} item md={4}>
+            <NewsItem detail={it} />
           </Grid>
         ))}
       </Grid>
-      <Pagination count={10} variant="outlined" color="primary" />
     </Container>
   );
 };

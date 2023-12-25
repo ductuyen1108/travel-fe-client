@@ -1,24 +1,12 @@
-"use client";
-import { configureStore } from "@reduxjs/toolkit";
-import {
-  useDispatch as useAppDispatch,
-  useSelector as useAppSelector,
-  TypedUseSelectorHook,
-} from "react-redux";
-import { rootReducer } from "./rootReducer";
-import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch as useAppDispatch, useSelector as useAppSelector, TypedUseSelectorHook } from 'react-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import { rootPersistConfig, rootReducer } from './rootReducer';
 
-const persistConfig = {
-  key: "root",
-  storage,
-  keyPrefix: "landingpage-",
-  whitelist: ["authLogin", "customerProfile"],
-};
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// ----------------------------------------------------------------------
 
-export const store = configureStore({
-  reducer: persistedReducer,
+const store = configureStore({
+  reducer: persistReducer(rootPersistConfig, rootReducer),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
@@ -26,16 +14,16 @@ export const store = configureStore({
     }),
 });
 
-export const persistor = persistStore(store);
+const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = typeof store.dispatch;
 
 const { dispatch } = store;
 
-export const useDispatch = () => useAppDispatch<AppDispatch>();
+const useDispatch = () => useAppDispatch<AppDispatch>();
 
-export const useSelector: TypedUseSelectorHook<RootState> = useAppSelector;
+const useSelector: TypedUseSelectorHook<RootState> = useAppSelector;
 
-export { dispatch };
+export { store, persistor, dispatch, useSelector, useDispatch };

@@ -9,6 +9,7 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'Application/json',
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
   },
 });
 

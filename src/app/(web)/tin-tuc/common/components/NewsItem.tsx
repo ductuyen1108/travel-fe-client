@@ -6,8 +6,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useRouter } from 'next/navigation';
+import { INewsItem } from '../interface';
+import { convertDate, convertSlug } from '@/common/utils/convertData';
 
-const NewsItem = () => {
+interface Props {
+  detail: INewsItem;
+}
+
+const NewsItem = ({ detail }: Props) => {
   const { push } = useRouter();
   return (
     <Box
@@ -21,17 +27,13 @@ const NewsItem = () => {
         },
       }}
     >
-      <Link href="/tin-tuc/hai-phong">
-        <Image
-          src="/images/home/destinations/ha-noi.jpg"
-          alt=""
-          width={1000}
-          height={950}
-          style={{ width: '100%', height: 'auto' }}
-        />
+      <Link href={`/tin-tuc/${convertSlug({ data: detail?.title })}`}>
+        <Image src={detail?.thumbnail.url} alt="" width={1000} height={950} style={{ width: '100%', height: 'auto' }} />
       </Link>
       <Box sx={{ padding: '25px' }}>
-        <Typography sx={{ fontSize: '12px', color: '#000000', fontWeight: 500 }}>DECEMBER 10, 2023</Typography>
+        <Typography sx={{ fontSize: '12px', color: '#000000', fontWeight: 500, textTransform: 'uppercase' }}>
+          {convertDate({ data: detail?.createdAt })}
+        </Typography>
         <Typography
           sx={{
             fontSize: '22px',
@@ -44,9 +46,9 @@ const NewsItem = () => {
             ':hover': { color: PRIMARY_MAIN, cursor: 'pointer' },
             mt: '5px',
           }}
-          onClick={() => push('/tin-tuc/hai-phong')}
+          onClick={() => push(`/tin-tuc/${convertSlug({ data: detail?.title })}`)}
         >
-          Memorial Day to Someone Told Me to Travel
+          {detail?.title}
         </Typography>
         <Typography
           sx={{
@@ -60,11 +62,13 @@ const NewsItem = () => {
             my: '15px',
           }}
         >
-          Meh synth Schlitz, tempor duis single-origin coffee ea next level ethnic fingerstache fanny pack nostrud.
-          Photo booth anim 8-bit hella, PBR 3 wolf moon beard Helvetica. Salvia esse nihil, flexitarian Truffaut synth
-          art party deep v chillwave. Seitan High Life reprehenderit consectetur cupidatat kogi.
+          {detail?.newsDetails[0].description}
         </Typography>
-        <Button variant="text" endIcon={<KeyboardArrowRightIcon />} onClick={() => push('/tin-tuc/haiphong')}>
+        <Button
+          variant="text"
+          endIcon={<KeyboardArrowRightIcon />}
+          onClick={() => push(`/tin-tuc/${convertSlug({ data: detail?.title })}`)}
+        >
           Xem bài viết
         </Button>
       </Box>

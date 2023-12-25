@@ -3,6 +3,7 @@ import { DescPage, TitlePage } from '@/common/config/text';
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { imagesCardDestination } from '../../constant';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Destination = () => {
   return (
@@ -15,7 +16,7 @@ const Destination = () => {
         <Grid container columnSpacing={3} rowSpacing={3} mt="50px">
           {imagesCardDestination.map((img) => (
             <Grid key={img.src} item md={3} sm={6} xs={6}>
-              <Card>
+              <Card component={Link} href={'/'}>
                 <CardActionArea>
                   <Box
                     sx={{

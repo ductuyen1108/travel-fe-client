@@ -6,18 +6,19 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useRouter } from 'next/navigation';
 import { PRIMARY_MAIN } from '@/common/constants/colors';
 import FormatPrice from '@/common/config/price';
-import FormatSlug from '@/common/config/slug';
 
 interface TourItemProps {
+  id: number;
   thumbnail: string;
   price: number;
   title: string;
   country: string;
   totalReviews: number;
   numberOfDays: number;
+  rate: number;
 }
 
-const TourItem = ({ thumbnail, price, title, country, totalReviews, numberOfDays }: TourItemProps) => {
+const TourItem = ({ id, thumbnail, price, title, country, totalReviews, numberOfDays }: TourItemProps) => {
   const [isHover, setIsHover] = useState(false);
   const { push } = useRouter();
   return (
@@ -45,7 +46,7 @@ const TourItem = ({ thumbnail, price, title, country, totalReviews, numberOfDays
           position: 'relative',
           cursor: 'pointer',
         }}
-        onClick={() => push(`/tours/${FormatSlug({ slug: title })}`)}
+        onClick={() => push(`/tours/${id}`)}
       >
         <Box
           sx={{
@@ -74,7 +75,7 @@ const TourItem = ({ thumbnail, price, title, country, totalReviews, numberOfDays
             overflow: 'hidden',
             WebkitLineClamp: 1,
           }}
-          onClick={() => push(`/tours/${FormatSlug({ slug: title })}`)}
+          onClick={() => push(`/tours/${id}`)}
         >
           {title}
         </Typography>

@@ -5,20 +5,25 @@ import { Box, Typography, Grid } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useGetLatestNews } from '../../common/hooks/useGetLatestNews';
+import { convertDate, convertSlug } from '@/common/utils/convertData';
 
-const ListNewsByTopic = () => {
+const ListNewsByTopic = ({ id }: { id?: number }) => {
   const { push } = useRouter();
+  const { listLatestNews, isLoadingListLatestNews } = useGetLatestNews({});
+  const listSuggestNews = listLatestNews?.filter((item) => item.id !== id);
+
   return (
     <Box sx={{ background: '#fff', border: '1px solid #dce0e0', borderRadius: '5px', padding: '24px' }}>
       <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Tin tức liên quan</Typography>
       <Box sx={{ pt: '15px', borderTop: '1px solid #dce0e0', mt: '5px' }}>
         <Grid container rowSpacing={3}>
-          {[1, 2, 3, 4, 5].map((it) => (
-            <Grid key={it} item>
+          {listSuggestNews?.map((it) => (
+            <Grid key={it.id} item>
               <Box sx={{ display: 'flex', gap: '20px', alignItems: 'normal' }}>
-                <Link href="#">
+                <Link href={`/tin-tuc/${convertSlug({ data: it.title })}`}>
                   <Image
-                    src="/images/tin-tuc/hero.jpg"
+                    src={it.thumbnail.url}
                     alt=""
                     width={1000}
                     height={800}
@@ -40,12 +45,12 @@ const ListNewsByTopic = () => {
                         color: PRIMARY_MAIN,
                       },
                     }}
-                    onClick={() => push('/tin-tuc/hai-phong')}
+                    onClick={() => push(`/tin-tuc/${convertSlug({ data: it.title })}`)}
                   >
-                    Memorial Day to Someone Told Me to Travel
+                    {it.title}
                   </Typography>
                   <Typography sx={{ fontSize: '11px', fontWeight: 600, color: '#999999', textTransform: 'uppercase' }}>
-                    December 10, 2023
+                    {convertDate({ data: it.createdAt })}
                   </Typography>
                 </Box>
               </Box>

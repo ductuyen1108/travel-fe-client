@@ -7,7 +7,9 @@ const Hero = () => {
     <Box
       sx={{
         background: `linear-gradient(0deg, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), url(/images/tours/hero.jpg) no-repeat center/cover, lightgray 50%`,
-        height: '550px',
+        height: '400px',
+        maxWidth: '100%',
+        objectFit: 'cover',
         display: 'flex',
         alignItems: 'center',
       }}

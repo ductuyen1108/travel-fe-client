@@ -1,12 +1,12 @@
 import { Grid, Rating, Typography, Box } from '@mui/material';
 
 interface RatingProps {
-  accomodation: number;
-  destination: number;
-  meals: number;
-  transport: number;
-  valueOfMoney: number;
-  overall: number;
+  accomodation?: number;
+  destination?: number;
+  meals?: number;
+  transport?: number;
+  valueOfMoney?: number;
+  overall?: number;
 }
 
 const RatingReview = ({ accomodation, destination, meals, transport, valueOfMoney, overall }: RatingProps) => {

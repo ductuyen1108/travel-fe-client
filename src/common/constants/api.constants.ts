@@ -1,1 +1,16 @@
-export const API_TOUR = 'tours';
+export const API_TOUR = '/customer/tour';
+export const API_USER_REVIEW = '/customer/tour/user-review';
+export const API_BOOK_TOUR = '/customer/tour/book-tour';
+export const API_CITY = '/customer/city';
+export const API_LATEST_NEWS = '/customer/news/numberOfLatestNews';
+export const API_NEWS_DETAILS = '/customer/news';
+export const API_LOGIN = '/customer/auth/login';
+export const API_REGISTER = '/customer/auth/register';
+export const API_GET_CURRENT = '/customer/auth/current';
+export const API_PROFILE = '/customer/profile';
+export const API_PRESIGN_URL = '/admin/file/presigned-url';
+export const API_POST = '/customer/post';
+export const API_PAYMENT = '/payments';
+export const API_PROVINCE = '/external/address/provinces';
+export const API_DISTRICT = '/external/address/district';
+export const API_WARD = '/external/address/ward';

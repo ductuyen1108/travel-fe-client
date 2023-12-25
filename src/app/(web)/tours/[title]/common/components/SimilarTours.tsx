@@ -7,10 +7,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Typography } from '@mui/material';
 import TourItem from '@/app/(web)/tours/common/components/TourItem';
+import { useGetListTours } from '@/app/(web)/Home/common/hooks/usegetListTours';
 
-const datas = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-
-const SimilarTours = () => {
+const SimilarTours = ({ id }: { id?: number }) => {
+  const { listTourData } = useGetListTours({});
+  const similarTours = listTourData?.items.filter((item) => item.id !== id);
   return (
     <Box sx={{ my: '50px' }}>
       <Box sx={{ maxWidth: '1350px', mx: 'auto', width: '100%', px: '20px' }}>
@@ -40,9 +41,17 @@ const SimilarTours = () => {
               },
             }}
           >
-            {datas.map((data) => (
+            {similarTours?.map((data) => (
               <SwiperSlide key={data.id} style={{ width: '100%' }}>
-                <TourItem />
+                <TourItem
+                  id={data?.id}
+                  country={data?.city?.cityName}
+                  numberOfDays={5}
+                  price={data?.tourDetail?.price}
+                  thumbnail={data?.image?.url}
+                  title={data?.title}
+                  totalReviews={data?.userReviews?.length}
+                />
               </SwiperSlide>
             ))}
           </Swiper>

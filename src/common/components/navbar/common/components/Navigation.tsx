@@ -10,31 +10,15 @@ import Link from 'next/link';
 import Headroom from 'react-headroom';
 
 const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    const shouldHide = currentScrollPos > 0;
-
-    setIsScrolled(shouldHide);
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   return (
     <Headroom style={{ zIndex: 100 }}>
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: isScrolled ? '#fff' : 'transparent',
-          borderBottom: isScrolled ? '1px solid #dce0e0' : 'none',
-          boxShadow: isScrolled ? '0 1px 10px rgba(0,0,0,.1)' : 'none',
+          backgroundColor: '#fff',
+          borderBottom: '1px solid #dce0e0',
+          boxShadow: '0 1px 10px rgba(0,0,0,.1)',
           transition: 'background-color 0.3s ease',
           height: '70px',
           py: '10px',

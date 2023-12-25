@@ -7,9 +7,15 @@ export const bookTourSchema = yup.object().shape({
     .string()
     .required('Vui lòng nhập số điện thoại')
     .matches(/^[0-9]{10}$/, 'Số điện thoại không hợp lệ'),
-  startDate: yup
-    .string()
-    .required('Vui lòng nhập ngày đi')
-    .matches(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, 'Ngày đi phải có định dạng ngày/tháng/năm'),
   numberOfPeople: yup.number().required('Vui lòng nhập số người').typeError('Vui lòng chỉ nhập số người'),
+});
+
+export const userReviewSchema = yup.object().shape({
+  reviewContent: yup.string().required('Vui lòng nhập nội dung đánh giá'),
+  accommodation: yup.number().required(),
+  destination: yup.number().required(),
+  meals: yup.number().required(),
+  transport: yup.number().required(),
+  valueForMoney: yup.number().required(),
+  overall: yup.number().required(),
 });

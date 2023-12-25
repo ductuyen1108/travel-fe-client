@@ -3,6 +3,10 @@ import { Box, Stack, Grid, Typography, SxProps, Rating } from '@mui/material';
 import { TitlePage } from '@/common/config/text';
 import Iconify from '@/common/components/iconify/Iconify';
 import RatingReview from './RatingReview';
+import { ITourDetail, ITourItem } from '@/app/(web)/Home/common/interface';
+import { convertDate } from '@/common/utils/convertData';
+import { reduceRating } from '@/common/utils/reduceRating';
+import { useEffect, useState } from 'react';
 
 const styledStack: SxProps = {
   justifyContent: 'center',
@@ -19,11 +23,21 @@ const styledIcon = { width: '40px', height: '40px', color: '#222' };
 
 const styledBoxInforTour: SxProps = { py: '20px', borderTop: '1px solid #dce0e0' };
 
-const TourDetails = () => {
+interface Props {
+  details?: ITourItem;
+  title?: string;
+}
+
+const TourDetails = ({ details, title }: Props) => {
+  console.log('average rating', details?.averageRating);
+  const [averageRating, setAverageRating] = useState<any>(details?.averageRating);
+  useEffect(() => {
+    return setAverageRating(details?.averageRating);
+  }, [details?.averageRating]);
   return (
     <Stack spacing={3}>
       <Box>
-        <TitlePage text="Grand Switzerland" color="#000" />
+        <TitlePage text={title || ''} color="#212B36" />
         <Grid
           container
           sx={{ mt: '20px', py: '25px', borderTop: '1px dashed #dce0e0', borderBottom: '1px dashed #dce0e0' }}
@@ -32,34 +46,30 @@ const TourDetails = () => {
           <Grid item sm={3} xs={6}>
             <Stack spacing={1} sx={styledStack}>
               <Iconify icon={'fluent:clock-24-regular'} style={styledIcon} />
-              <Typography sx={styledTypo}>6 ngày</Typography>
-            </Stack>
-          </Grid>
-          <Grid item sm={3} xs={6}>
-            <Stack spacing={1} sx={styledStack}>
-              <Iconify icon={'fa-regular:id-card'} style={styledIcon} />
-              <Typography sx={styledTypo}>12+</Typography>
+              <Typography sx={styledTypo}>5 ngày</Typography>
             </Stack>
           </Grid>
           <Grid item sm={3} xs={6}>
             <Stack spacing={1} sx={styledStack}>
               <Iconify icon={'uil:schedule'} style={styledIcon} />
-              <Typography sx={styledTypo}>May, Jun, Jul</Typography>
+              <Typography sx={styledTypo}>{convertDate({ data: details?.tourDetail?.startDate || '' })}</Typography>
+            </Stack>
+          </Grid>
+          <Grid item sm={3} xs={6}>
+            <Stack spacing={1} sx={styledStack}>
+              <Iconify icon={'fa-regular:id-card'} style={styledIcon} />
+              <Typography sx={styledTypo}>{details?.tourDetail?.ageLimit} +</Typography>
             </Stack>
           </Grid>
           <Grid item sm={3} xs={6}>
             <Stack spacing={1} sx={styledStack}>
               <Iconify icon={'ph:user-light'} style={styledIcon} />
-              <Typography sx={styledTypo}>Khả dụng 50</Typography>
+              <Typography sx={styledTypo}>Khả dụng {details?.tourDetail?.peopleLimit}</Typography>
             </Stack>
           </Grid>
         </Grid>
       </Box>
-      <Box>
-        {parse(
-          'Meh synth Schlitz, tempor duis single-origin coffee ea next level ethnic fingerstache fanny pack nostrud. Photo booth anim 8-bit hella, PBR 3 wolf moon beard Helvetica. Salvia esse nihil, flexitarian Truffaut synth art party deep v chillwave. Seitan High Life reprehenderit consectetur cupidatat kogi. Et leggings fanny pack, elit bespoke vinyl art party Pitchfork selfies master cleanse Kickstarter seitan retro. Drinking vinegar stumptown yr pop-up artisan sunt. Deep v cliche lomo biodiesel Neutra selfies. Shorts fixie consequat flexitarian four loko tempor duis single-origin coffee. Banksy, elit small batch freegan sed.',
-        )}
-      </Box>
+      <Stack className="tour-content">{parse(details?.tourDetail?.content || '')}</Stack>
       <Stack mt="50px">
         <Box sx={styledBoxInforTour}>
           <Grid container rowSpacing={2}>
@@ -77,7 +87,7 @@ const TourDetails = () => {
               Ngày / Giờ khởi hành:
             </Grid>
             <Grid item sm={8} xs={12} sx={{ fontWeight: 300 }}>
-              8 giờ sáng ngày 20/11/2023
+              {convertDate({ data: details?.tourDetail?.startDate || '' })}
             </Grid>
           </Grid>
         </Box>
@@ -87,7 +97,7 @@ const TourDetails = () => {
               Thời gian chuyến đi:
             </Grid>
             <Grid item sm={8} xs={12} sx={{ fontWeight: 300 }}>
-              3 ngày 2 đêm
+              5 ngày
             </Grid>
           </Grid>
         </Box>
@@ -103,22 +113,24 @@ const TourDetails = () => {
                 height="300px"
                 frameBorder="0"
                 style={{ border: '2px solid #dce0e0' }}
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.5876993158727!2d105.86325327513217!3d20.275927181191687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31367eb022ad8d53%3A0x8b48ec715231c285!2zQsOhaSDEkMOtbmggUGFnb2Rh!5e0!3m2!1svi!2s!4v1700836182922!5m2!1svi!2s"
+                src={details?.tourDetail?.map}
                 allowFullScreen
               />
             </Grid>
           </Grid>
         </Box>
         <Stack>
-          <Typography sx={{ fontSize: '18px', color: '#000', fontWeight: 600 }}>4 Đánh giá</Typography>
+          <Typography sx={{ fontSize: '18px', color: '#000', fontWeight: 600 }}>
+            {details?.userReviews?.length} đánh giá
+          </Typography>
           <Box sx={{ py: '30px', borderTop: '1px solid #dce0e0', borderBottom: '1px solid #dce0e0', mt: '10px' }}>
             <RatingReview
-              accomodation={4.5}
-              destination={4.5}
-              meals={4.5}
-              transport={4.5}
-              valueOfMoney={4.5}
-              overall={4.5}
+              accomodation={averageRating?.accommodation}
+              destination={averageRating?.destination}
+              meals={averageRating?.meals}
+              transport={averageRating?.transport}
+              valueOfMoney={averageRating?.valueForMoney}
+              overall={averageRating?.overall}
             />
           </Box>
         </Stack>
