@@ -11,7 +11,7 @@ export async function presignUrl(file: any, axiosInstant?: AxiosStatic) {
     try {
       const presignHeaderInfo: any = await axiosClient.post(API_PRESIGN_URL, {
         type: imgType,
-        fileName: imgName,
+        /* fileName: imgName, */
       });
       console.log(presignHeaderInfo);
       const urlPostImng = presignHeaderInfo?.presignedUrl;

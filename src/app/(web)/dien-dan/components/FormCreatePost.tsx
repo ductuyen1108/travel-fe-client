@@ -4,15 +4,38 @@ import { FormProvider, RHFTextField } from '@/common/components/hook-form';
 import { RHFUploadSingleFile } from '@/common/components/hook-form/RHFUpload';
 import { GRAY_800 } from '@/common/constants/colors';
 import { fData } from '@/common/utils/formatNumber';
-import { FormHelperText, Paper, Stack, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { Paper, Stack, Typography } from '@mui/material';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useCreatePost } from '../common/hooks/useCreatePost';
+import useShowSnackbar from '@/common/hooks/useShowSnackbar';
+import { IDataFormCreatePost, ISubmitDataPost } from '../common/interface';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schemaCreatePost } from '../common/schema';
+import { usePresignImg } from '@/common/hooks/usePresignImg';
+import { LoadingButton } from '@mui/lab';
 
 const FormCreatePost = () => {
-  const methods = useForm({});
+  const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
+  const { mutate: mutateCreate } = useCreatePost({
+    onSuccess: () => {
+      showSuccessSnackbar('Thêm mới bài viết thành công');
+    },
+    onError: () => {
+      showErrorSnackbar('Thêm mới bài viết thất bại');
+    },
+  });
+
+  const { handleUpload } = usePresignImg();
+
+  const methods = useForm<ISubmitDataPost>({
+    resolver: yupResolver(schemaCreatePost),
+  });
   const {
     handleSubmit,
     setValue,
+    watch,
+    clearErrors,
     formState: { errors, dirtyFields },
   } = methods;
   const handleDrop = useCallback(
@@ -29,7 +52,23 @@ const FormCreatePost = () => {
     },
     [setValue],
   );
-  const onSubmit = () => {};
+  const onSubmit = async (data: ISubmitDataPost) => {
+    const file = await handleUpload(data?.image as File);
+    const dataCreate: IDataFormCreatePost = {
+      title: data.title,
+      content: data.content,
+      description: data.description,
+      imageId: file.id,
+    };
+    mutateCreate(dataCreate);
+  };
+
+  useEffect(() => {
+    if (watch('image')) {
+      clearErrors('image');
+    }
+  }, [watch('image')]);
+
   return (
     <Paper
       elevation={1}
@@ -47,9 +86,9 @@ const FormCreatePost = () => {
       </Typography>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={1.5}>
-          <RHFTextField name="" multiline minRows={2} maxRows={2} label="Tiêu đề" />
-          <RHFTextField name="" label="Mô tả ngắn" />
-          <RHFTextField name="" multiline minRows={3} maxRows={6} label="Nội dung" />
+          <RHFTextField name="title" multiline minRows={2} maxRows={2} label="Tiêu đề" />
+          <RHFTextField name="description" label="Mô tả ngắn" />
+          <RHFTextField name="content" multiline minRows={3} maxRows={6} label="Nội dung" />
           <RHFUploadSingleFile
             name="image"
             maxSize={3145728}
@@ -58,9 +97,6 @@ const FormCreatePost = () => {
             isContainImg
             helperText={
               <>
-                <FormHelperText sx={{ color: 'red', paddingLeft: '16px', marginTop: 1 }}>
-                  {errors?.image?.message}
-                </FormHelperText>
                 <Typography
                   variant="caption"
                   sx={{
@@ -78,6 +114,14 @@ const FormCreatePost = () => {
               </>
             }
           />
+        </Stack>
+        <Stack direction={'row'} alignItems={'center'} spacing={2} mt={2}>
+          <LoadingButton type="submit" variant="contained" fullWidth>
+            Tạo mới
+          </LoadingButton>
+          <LoadingButton variant="outlined" fullWidth>
+            Hủy bỏ
+          </LoadingButton>
         </Stack>
       </FormProvider>
     </Paper>

@@ -2,32 +2,70 @@ import Iconify from '@/common/components/iconify/Iconify';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack, Typography } from '@mui/material';
 import { useGetProfile } from '../common/hooks/useGetProfile';
 import { convertDate, convertGender } from '@/common/utils/convertData';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FormProvider, RHFTextField } from '@/common/components/hook-form';
 import { useForm } from 'react-hook-form';
-import RHFSelectPaginationMultiple from '@/common/components/hook-form/RHFSelectPaginationMutiple';
 import { useGetDistrictByProvinceId, useGetProvinces, useGetWardByDistrictId } from '../common/hooks/useGetAddress';
 import RHFSelectPagination from '@/common/components/hook-form/RHFSelectPagination';
 import RHFDatePicker from '@/common/components/hook-form/RHFDatePicker';
+import { IDataFormEditProfile, ISubmitEditProfile } from '../common/interface';
+import useDeepEffect from '@/common/hooks/useDeepEffect';
+import useShowSnackbar from '@/common/hooks/useShowSnackbar';
+import { useEditProfile } from '../common/hooks/useEditProfile';
+import ModalChangePassword from './ModalChangePassword';
 
 const SideBar = () => {
   const { profileData, isLoadingData } = useGetProfile();
   const [open, setOpen] = useState(false);
-  const methods = useForm({});
-  const {
-    handleSubmit,
-    reset,
-    watch,
-    formState: { isSubmitting, errors },
-  } = methods;
+  const { useDeepCompareEffect } = useDeepEffect();
+  const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
+  const { mutate: mutateEdit } = useEditProfile({
+    onSuccess: () => {
+      showSuccessSnackbar('Chỉnh sửa thông tin cá nhân thành công');
+    },
+    onError: () => {
+      showErrorSnackbar('Chỉnh sửa thông tin cá nhân thất bại');
+    },
+  });
+  const methods = useForm<ISubmitEditProfile>({
+    defaultValues: {
+      address: profileData?.address,
+      birthDate: profileData?.birthDate,
+      email: profileData?.email,
+      name: profileData?.name,
+    },
+  });
+  const { handleSubmit, reset, watch } = methods;
 
   const { dataProvinces } = useGetProvinces();
   const { dataDistrict } = useGetDistrictByProvinceId(watch<any>('provinceId')?.code);
   const { dataWard } = useGetWardByDistrictId(watch<any>('districtId')?.code);
 
-  const onSubmit = (data: any) => {
-    console.log('data: ', data);
+  const onSubmit = (data: ISubmitEditProfile) => {
+    const dataEdit: IDataFormEditProfile = {
+      address: data.address,
+      avatarId: profileData?.avatar?.id || 0,
+      birthDate: data.birthDate,
+      districtId: data.districtId?.code,
+      provinceId: data.provinceId?.code,
+      email: data.email,
+      name: data.name,
+      wardId: data.wardId?.code,
+    };
+    mutateEdit(dataEdit);
   };
+
+  useDeepCompareEffect(() => {
+    if (profileData) {
+      const dataVN = {
+        address: profileData?.address,
+        birthDate: profileData?.birthDate,
+        email: profileData?.email,
+        name: profileData?.name,
+      };
+      reset(dataVN);
+    }
+  }, [profileData]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -57,11 +95,11 @@ const SideBar = () => {
           content={convertDate({ data: profileData?.birthDate || '' })}
           title="Ngày sinh"
         />
-        <InforItem icon="typcn:user" content={convertGender(profileData?.gender || '')} title="Giới tính" />
         <InforItem icon="ic:outline-email" content={profileData?.email || 'chưa cập nhật'} title="Email" />
         <Button variant="contained" sx={{ borderRadius: '10px' }} onClick={handleClickOpen}>
           Chỉnh sửa thông tin cá nhân
         </Button>
+        <ModalChangePassword />
         <Dialog open={open} onClose={handleClose}>
           <Stack spacing={2} p={3}>
             <DialogTitle>{'Chỉnh sửa thông tin cá nhân'}</DialogTitle>
@@ -69,7 +107,7 @@ const SideBar = () => {
               <Stack spacing={2}>
                 <RHFTextField name="name" label="Họ và tên" />
                 <RHFTextField name="email" label="Email" />
-                <RHFDatePicker name="birthDate" label={'Ngày sinh'} />
+                <RHFDatePicker name="birthDate" label={'Ngày sinh'} size="small" />
                 <RHFTextField name="address" label="Địa chỉ cụ thể" />
                 <RHFSelectPagination
                   name="provinceId"

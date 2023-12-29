@@ -1,3 +1,4 @@
+import { IAvatar } from '@/app/(web)/profile/common/interface';
 import { ICity, IImage } from '../../common/interface';
 
 export interface ITourDetail {
@@ -50,7 +51,7 @@ export interface IUserReviews {
       gender: string;
       userId: number;
       address: string;
-      avatar: string;
+      avatar: IAvatar;
     };
   };
 }
@@ -66,4 +67,54 @@ export interface ISubmitFormBookTour {
   email: string;
   phoneNumber: string;
   numberOfPeople: number;
+}
+
+export interface IParamsBookTour {
+  page?: number;
+  limit?: number;
+}
+
+export interface IBookTour {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  status: string;
+  tour: {
+    id: number;
+    title: string;
+    image: {
+      id: 3;
+      key: string;
+      type: string;
+      uploaderId: 10;
+      url: string;
+    };
+    city: ICity;
+    tourDetail: {
+      id: number;
+      startDate: string;
+      endDate: string;
+      ageLimit: number;
+      peopleLimit: number;
+      content: string;
+      price: number;
+      departureLocation: string;
+      departureTime: string;
+      returnTime: string;
+      map: string;
+      returnLocation: string;
+    };
+  };
+}
+
+export interface IResBookTour {
+  items: IBookTour[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalPages: number;
+    currentPage: number;
+  };
 }

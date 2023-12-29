@@ -14,7 +14,7 @@ const TourReviews = ({ userReviews }: Props) => {
         <Box key={item.id} sx={{ py: '30px', borderBottom: '1px dashed #dce0e0' }}>
           <Stack spacing={3} direction={'row'}>
             <Avatar
-              src={item?.user?.customer?.avatar ? item?.user?.customer?.avatar : '/images/tours/hero.jpg'}
+              src={item?.user?.customer?.avatar?.url ? item?.user?.customer?.avatar?.url : '/images/tours/hero.jpg'}
               alt=""
               sx={{ width: '70px', height: '70px', boxShadow: '0 0px 15px rgba(0,0,0,.3)' }}
             />

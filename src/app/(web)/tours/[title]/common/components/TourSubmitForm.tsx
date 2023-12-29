@@ -10,22 +10,29 @@ import { FormProvider, RHFTextField } from '@/common/components/hook-form';
 import { useBookTour } from '../hooks/useBookTour';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from '@/common/redux/store';
+import { setShowModalLogin } from '@/common/components/navbar/common/slice';
+import { setDataPayment } from '@/app/(web)/thanh-toan/common/slice';
+import { randomText } from '@/common/utils/randomText';
 
 const TourSubmitForm = ({ price, tourId }: { price: number; tourId: number }) => {
   const { push } = useRouter();
+  const token = localStorage.getItem('token');
+  const dispatch = useDispatch();
   const methods = useForm<ISubmitFormBookTour>({
     resolver: yupResolver(bookTourSchema),
   });
   const {
     handleSubmit,
     reset,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const { mutate } = useBookTour({
     onSuccess: () => {
       showSuccessSnackbar('Đặt tour du lịch thành công!');
-      push('/thanh-toan');
+      push(`/thanh-toan/${tourId}`);
       reset();
     },
     onError: () => {
@@ -38,8 +45,11 @@ const TourSubmitForm = ({ price, tourId }: { price: number; tourId: number }) =>
       tourId: tourId,
       numberOfPeople: data.numberOfPeople,
     };
-    console.log('dataBookTour', dataBookTour);
-    mutate(dataBookTour);
+    if (token) {
+      mutate(dataBookTour);
+    } else {
+      dispatch(setShowModalLogin(true));
+    }
   };
   return (
     <Box>

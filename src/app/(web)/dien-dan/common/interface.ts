@@ -5,7 +5,30 @@ export interface IPost {
   content: string;
   description: string;
   title: string;
+  createdAt: string;
   image: IImage;
+  user: {
+    id: number;
+    type: string;
+    customer: {
+      id: number;
+      phoneNumber: string;
+      email: string;
+      name: string;
+      birthDate: string;
+      createdAt: string;
+      gender: string;
+      userId: number;
+      address: string;
+      avatar: {
+        id: number;
+        key: string;
+        type: string;
+        uploaderId: number;
+        url: string;
+      };
+    };
+  };
 }
 
 export interface IImage {
@@ -31,7 +54,7 @@ export interface IResPost {
 export interface IParamsPost {
   title?: string;
   content?: string;
-  userId?: string;
+  userId?: number;
   page?: number;
   limit?: number;
 }
@@ -41,14 +64,14 @@ export interface IDataFormCreatePost {
   content: string;
   title: string;
   description: string;
-  image: CustomFile | string;
+  imageId: number;
 }
 
 export interface ISubmitDataPost {
   content: string;
   title: string;
   description: string;
-  imageId: number;
+  image: CustomFile | any;
 }
 
 export interface IDataEditPost {

@@ -28,7 +28,13 @@ const NewsItem = ({ detail }: Props) => {
       }}
     >
       <Link href={`/tin-tuc/${convertSlug({ data: detail?.title })}`}>
-        <Image src={detail?.thumbnail.url} alt="" width={1000} height={950} style={{ width: '100%', height: 'auto' }} />
+        <Image
+          src={detail?.thumbnail.url}
+          alt=""
+          width={1000}
+          height={950}
+          style={{ width: '100%', height: '220px' }}
+        />
       </Link>
       <Box sx={{ padding: '25px' }}>
         <Typography sx={{ fontSize: '12px', color: '#000000', fontWeight: 500, textTransform: 'uppercase' }}>

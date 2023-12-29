@@ -3,7 +3,7 @@ import { QUERY_KEYS } from '@/common/constants/queryKey.constants';
 import { editProfile } from '../service';
 import { ICallback } from '@/app/(web)/tours/common/interface';
 
-export const useEdit = (callback: ICallback) => {
+export const useEditProfile = (callback: ICallback) => {
   const queryClient = useQueryClient();
   return {
     ...useMutation(editProfile, {

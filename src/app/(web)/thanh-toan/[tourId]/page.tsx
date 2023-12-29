@@ -5,11 +5,18 @@ import { GRAY_500, GRAY_600, GRAY_800, PRIMARY_LIGHT, PRIMARY_MAIN } from '@/com
 import { LoadingButton } from '@mui/lab';
 import { Box, Stack, Paper, Typography, Button, FormLabel } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { IDataPayment, ISubmitDataPayment } from './common/interface';
+import { IDataPayment, ISubmitDataPayment } from '../common/interface';
 import { randomText } from '@/common/utils/randomText';
 import { useSelector } from '@/common/redux/store';
+import { IBookTour } from '../../tours/[title]/common/interface';
 
-const PaymentMomo = () => {
+interface Props {
+  tourBooked: IBookTour;
+}
+
+const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
+  console.log('params nhaanj ', params.tourId);
+
   const { dataPayment } = useSelector((state) => state.payment);
   const methods = useForm<ISubmitDataPayment>({
     defaultValues: dataPayment,
@@ -20,9 +27,9 @@ const PaymentMomo = () => {
     formState: { isSubmitting, errors },
   } = methods;
   const onSubmit = (data: ISubmitDataPayment) => {
-    const dataPayment: IDataPayment = {
+    const dataPaymenOnlinet: IDataPayment = {
       orderId: randomText(data.orderId),
-      orderInfo: data.orderInfo,
+      orderInfo: `dtTravel_${data.orderInfo}`,
       amount: 50000,
       autoCapture: true,
       lang: 'vi',
@@ -84,9 +91,9 @@ const PaymentMomo = () => {
                 Thông tin tour du lịch
               </Typography>
               <Stack spacing={1.5}>
-                <RHFTextField name="orderInfo" label="Tên tour du lịch" disabled />
-                <RHFTextField name="orderId" label="Mã giao dịch" disabled />
-                <RHFTextField name="totalPeople" label="Số người tham gia" disabled />
+                <RHFTextField name="orderInfo" label="Tên tour du lịch" />
+                <RHFTextField name="orderId" label="Mã giao dịch" />
+                <RHFTextField name="totalPeople" label="Số người tham gia" />
               </Stack>
             </Stack>
             <Stack spacing={2} width={'100%'} sx={{ border: '1px solid #dce0e0', borderRadius: '10px', padding: 2 }}>
@@ -107,7 +114,7 @@ const PaymentMomo = () => {
             <Stack direction={'row'} spacing={2} alignItems={'center'} justifyContent={'flex-end'}>
               <Typography sx={{ fontSize: '30px', color: GRAY_800, fontWeight: 600 }}>Tổng tiền:</Typography>
               <Typography sx={{ fontSize: '30px', color: '#e84118', fontWeight: 600 }}>
-                {(50000000).toLocaleString('vi-VN')} đ
+                {(39596000).toLocaleString('vi-VN')} đ
               </Typography>
             </Stack>
           </Stack>

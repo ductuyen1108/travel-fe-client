@@ -18,7 +18,7 @@ interface TourItemProps {
   rate: number;
 }
 
-const TourItem = ({ id, thumbnail, price, title, country, totalReviews, numberOfDays }: TourItemProps) => {
+const TourItem = ({ id, thumbnail, price, title, country, totalReviews, numberOfDays, rate }: TourItemProps) => {
   const [isHover, setIsHover] = useState(false);
   const { push } = useRouter();
   return (
@@ -84,7 +84,7 @@ const TourItem = ({ id, thumbnail, price, title, country, totalReviews, numberOf
         </Typography>
         <Stack justifyContent={'space-between'} alignItems={'center'} direction={'row'}>
           <Stack spacing={1} alignItems={'center'} direction={'row'}>
-            <Rating name="size-small" defaultValue={4.5} size="small" precision={0.5} readOnly />
+            <Rating name="size-small" defaultValue={rate} size="small" precision={0.5} readOnly />
             <Typography sx={{ fontSize: '12px', color: '#222222', fontWeight: 500 }}>{totalReviews} reviews</Typography>
           </Stack>
           <Stack spacing={1} alignItems={'center'} direction={'row'}>

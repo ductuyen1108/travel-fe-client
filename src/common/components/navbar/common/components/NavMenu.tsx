@@ -8,14 +8,17 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useGetCurrent } from '../hooks/useGetCurrent';
 import Iconify from '@/common/components/iconify/Iconify';
+import useDeepEffect from '@/common/hooks/useDeepEffect';
+import ModalLogin from './ModalLogin';
 
 const NavMenu = () => {
   const currentScrollPos = typeof window !== 'undefined' ? window.pageYOffset : 0;
   const pathName = usePathname();
   const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { useDeepCompareEffect } = useDeepEffect();
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     const activeNav = navigation.find((navItem) => navItem.path === pathName);
     if (activeNav) {
       setActiveNavItem(activeNav.text);
@@ -25,7 +28,6 @@ const NavMenu = () => {
   }, [pathName, navigation]);
 
   const { currentData } = useGetCurrent();
-  console.log('current', currentData);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -60,7 +62,7 @@ const NavMenu = () => {
         <>
           <Box
             component={'img'}
-            src={currentData?.avatar ? currentData?.avatar : '/images/mudryk.jpg'}
+            src={currentData?.avatar?.url ? currentData?.avatar?.url : '/images/mudryk.jpg'}
             alt={currentData?.name}
             sx={{
               width: '40px',
@@ -107,9 +109,7 @@ const NavMenu = () => {
           </Menu>
         </>
       ) : (
-        <Button component={Link} href="/login" variant="contained" sx={{ borderRadius: '24px' }}>
-          Đăng nhập
-        </Button>
+        <ModalLogin />
       )}
     </Box>
   );

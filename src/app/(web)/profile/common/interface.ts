@@ -9,6 +9,7 @@ export interface IProfile {
   userId: number;
   tierPoint: number;
   address: string;
+  fullAddress: string;
   avatar: IAvatar;
 }
 
@@ -32,9 +33,32 @@ export interface IDataFormEditProfile {
   wardId: number;
 }
 
+export interface ISubmitEditProfile {
+  name: string;
+  email: string;
+  avatarId: number;
+  address: string;
+  birthDate: string;
+  provinceId: {
+    code: number;
+  };
+  districtId: {
+    code: number;
+  };
+  wardId: {
+    code: number;
+  };
+}
+
 export interface IChangePassword {
   password: string;
   newPassword: string;
+}
+
+export interface ISubmitChangePassword {
+  password: string;
+  newPassword: string;
+  confirmNewPassword?: string;
 }
 
 // Address
@@ -72,4 +96,9 @@ export interface IWard {
   pathWithType: string;
   code: string;
   parent_code: string;
+}
+
+export interface StateProps {
+  showOldPassword: boolean;
+  showNewPassword: boolean;
 }

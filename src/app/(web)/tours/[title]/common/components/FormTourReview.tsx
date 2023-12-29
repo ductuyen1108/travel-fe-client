@@ -11,9 +11,13 @@ import RHFRating from '@/common/components/hook-form/RHFRating';
 import { LoadingButton } from '@mui/lab';
 import { useUserReivew } from '../../../common/hooks/useUserReview';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
+import { useDispatch } from '@/common/redux/store';
+import { setShowModalLogin } from '@/common/components/navbar/common/slice';
 
 const FormTourReview = ({ tourId }: { tourId?: number }) => {
+  const token = localStorage.getItem('token');
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
+  const dispatch = useDispatch();
   const methods = useForm<ISubmitReview>({
     resolver: yupResolver(userReviewSchema),
     defaultValues: {
@@ -35,7 +39,7 @@ const FormTourReview = ({ tourId }: { tourId?: number }) => {
       showSuccessSnackbar('Gửi đánh giá thành công');
     },
     onError: () => {
-      showErrorSnackbar('Gửi đánh giá thất bại');
+      showErrorSnackbar('Bạn đã đánh giá tour du lịch này rồi');
     },
   });
   const onSubmit = (data: ISubmitReview) => {
@@ -51,9 +55,11 @@ const FormTourReview = ({ tourId }: { tourId?: number }) => {
         valueForMoney: data.valueForMoney,
       },
     };
-    showSuccessSnackbar('Gửi đánh giá thành công');
-    console.log('dataReview', dataReview);
-    mutate(dataReview);
+    if (token) {
+      mutate(dataReview);
+    } else {
+      dispatch(setShowModalLogin(true));
+    }
   };
   return (
     <Box mt="30px">

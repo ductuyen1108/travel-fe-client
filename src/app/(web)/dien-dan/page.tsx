@@ -10,6 +10,7 @@ const SocialMedia = () => {
   return (
     <section>
       <Navbar />
+      <Hero />
       <Container>
         <Stack direction={{ sm: 'row', xs: 'column' }} justifyContent={'space-between'} width={'100%'} py={'50px'}>
           <ListPost />

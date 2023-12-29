@@ -4,12 +4,14 @@ import { HOST_API } from '../config/hostApi';
 
 // ----------------------------------------------------------------------
 
+const token = localStorage.getItem('token');
+
 const axiosClient = axios.create({
   baseURL: HOST_API,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'Application/json',
-    Authorization: 'Bearer ' + localStorage.getItem('token'),
+    Authorization: token ? 'Bearer ' + token : '',
   },
 });
 

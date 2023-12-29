@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Container from '@/common/config/container';
 import { GRADIENT_COLOR } from '@/common/constants/colors';
 import { Box, Typography } from '@mui/material';
@@ -11,12 +10,11 @@ import Headroom from 'react-headroom';
 
 const Navigation = () => {
   return (
-    <Headroom style={{ zIndex: 100 }}>
+    <Headroom style={{ zIndex: 100, background: '#fff' }}>
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: '#fff',
           borderBottom: '1px solid #dce0e0',
           boxShadow: '0 1px 10px rgba(0,0,0,.1)',
           transition: 'background-color 0.3s ease',

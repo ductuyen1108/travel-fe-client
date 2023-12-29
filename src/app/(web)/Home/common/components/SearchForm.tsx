@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Grid, Icon } from '@mui/material';
+import { Box, Button, Grid, Icon, Stack } from '@mui/material';
 import { GRADIENT_COLOR, GRAY_700 } from '@/common/constants/colors';
 import { FormProvider, RHFTextField } from '@/common/components/hook-form';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import { useDispatch } from '@/common/redux/store';
 import { setDataFilter } from '../slice';
 import Iconify from '@/common/components/iconify/Iconify';
 import { useRouter } from 'next/navigation';
+import RHFDatePicker from '@/common/components/hook-form/RHFDatePicker';
 
 const SearchForm = () => {
   const methods = useForm();
@@ -28,55 +29,57 @@ const SearchForm = () => {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} style={{ position: 'relative' }}>
-      <Box mb={3}>
+    <FormProvider
+      methods={methods}
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        position: 'relative',
+        padding: '24px 24px',
+        background: '#fff',
+        borderRadius: '15px',
+      }}
+    >
+      <Stack mb={3}>
         <Grid container columnSpacing={4} rowSpacing={3}>
           <Grid item sm={3} xs={12}>
-            <Box sx={{ padding: '10px', background: '#fff', borderRadius: '8px' }}>
-              <RHFTextField
-                name="cityName"
-                label="Nhập địa điểm"
-                InputProps={{
-                  endAdornment: (
-                    <Iconify icon={'solar:city-bold'} sx={{ width: '20px', height: '20px', color: GRAY_700 }} />
-                  ),
-                }}
-              />
-            </Box>
+            <RHFTextField
+              name="cityName"
+              label="Nhập địa điểm"
+              InputProps={{
+                endAdornment: (
+                  <Iconify icon={'solar:city-bold'} sx={{ width: '20px', height: '20px', color: GRAY_700 }} />
+                ),
+              }}
+            />
           </Grid>
           <Grid item sm={3} xs={12}>
-            <Box sx={{ padding: '10px', background: '#fff', borderRadius: '8px' }}>
-              <RHFTextField name="startDate" label="Ngày bắt đầu" />
-            </Box>
+            {/* <RHFTextField name="startDate" label="Ngày bắt đầu" /> */}
+            <RHFDatePicker name="startDate" label={'Ngày bắt đầu'} size="small" />
           </Grid>
           <Grid item sm={3} xs={12}>
-            <Box sx={{ padding: '10px', background: '#fff', borderRadius: '8px' }}>
-              <RHFTextField
-                name="startPrice"
-                label="Giá thấp nhất"
-                InputProps={{
-                  endAdornment: (
-                    <Iconify icon={'solar:tag-price-linear'} sx={{ width: '20px', height: '20px', color: GRAY_700 }} />
-                  ),
-                }}
-              />
-            </Box>
+            <RHFTextField
+              name="startPrice"
+              label="Giá thấp nhất"
+              InputProps={{
+                endAdornment: (
+                  <Iconify icon={'solar:tag-price-linear'} sx={{ width: '20px', height: '20px', color: GRAY_700 }} />
+                ),
+              }}
+            />
           </Grid>
           <Grid item sm={3} xs={12}>
-            <Box sx={{ padding: '10px', background: '#fff', borderRadius: '8px' }}>
-              <RHFTextField
-                name="endPrice"
-                label="Giá cao nhất"
-                InputProps={{
-                  endAdornment: (
-                    <Iconify icon={'solar:tag-price-linear'} sx={{ width: '20px', height: '20px', color: GRAY_700 }} />
-                  ),
-                }}
-              />
-            </Box>
+            <RHFTextField
+              name="endPrice"
+              label="Giá cao nhất"
+              InputProps={{
+                endAdornment: (
+                  <Iconify icon={'solar:tag-price-linear'} sx={{ width: '20px', height: '20px', color: GRAY_700 }} />
+                ),
+              }}
+            />
           </Grid>
         </Grid>
-      </Box>
+      </Stack>
       <Button
         startIcon={<Iconify icon={'charm:search'} />}
         variant="contained"

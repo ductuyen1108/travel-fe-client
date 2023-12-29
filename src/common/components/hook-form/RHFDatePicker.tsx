@@ -39,12 +39,18 @@ export default function RHFDatePicker({
               label={label}
               inputFormat={inputFormat}
               views={views}
-              onChange={(value: Date) => {
+              onChange={(value: Date | null) => {
                 field.onChange(value);
                 onSetValueCustomize?.(value, name);
               }}
               renderInput={(params: any) => (
-                <TextField {...params} helperText={error && error.message} error={!!error} {...other} />
+                <TextField
+                  {...params}
+                  helperText={error && error.message}
+                  error={!!error}
+                  {...other}
+                  sx={{ '& .MuiInputBase-input': { padding: '10px 14px !important' } }}
+                />
               )}
             />
           </Localization>

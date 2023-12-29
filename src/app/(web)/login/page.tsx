@@ -2,8 +2,8 @@
 
 import { FormProvider, RHFTextField } from '@/common/components/hook-form';
 import Iconify from '@/common/components/iconify/Iconify';
-import { PRIMARY_MAIN } from '@/common/constants/colors';
-import { Stack, Typography } from '@mui/material';
+import { GRAY_500, GRAY_800, PRIMARY_MAIN } from '@/common/constants/colors';
+import { IconButton, InputAdornment, Stack, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { IDataLogin, IFormLogin, IResLogin } from './common/interface';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,10 +12,15 @@ import { LoadingButton } from '@mui/lab';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
 import { useLogin } from './common/hooks/useLogin';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from '@/common/redux/store';
+import { setShowPassword } from './common/login.slice';
+import { DescPage, TitlePage } from '@/common/config/text';
 
 const Login = () => {
   const { push } = useRouter();
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
+  const { showPassword } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
   const { mutate, isLoading } = useLogin({
     onSuccess: (result: IResLogin) => {
       localStorage.setItem('token', result?.accessToken);
@@ -61,16 +66,9 @@ const Login = () => {
         component={'img'}
       />
       <Stack width={{ sm: '40%', xs: '100%' }} sx={{ background: '#fff' }} justifyContent={'center'} spacing={2}>
-        <Stack alignItems={'center'} justifyContent={'center'} spacing={1}>
-          <Stack
-            sx={{ padding: '10px', border: `1px solid ${PRIMARY_MAIN}`, borderRadius: '50%', width: 'fit-content' }}
-          >
-            <Iconify
-              icon={'fluent:lock-closed-16-regular'}
-              sx={{ width: '40px', height: '40px', color: PRIMARY_MAIN }}
-            />
-          </Stack>
-          <Typography sx={{ fontSize: '32px', fontWeight: 600, color: PRIMARY_MAIN }}>Đăng nhập</Typography>
+        <Stack alignItems={'center'} justifyContent={'center'} spacing={1} px={4} mb={2}>
+          <TitlePage text="Chào mừng đến với" color={GRAY_800} />
+          <TitlePage text="DT Travel" color={PRIMARY_MAIN} />
         </Stack>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} style={{ width: '100%', padding: '0 24px' }}>
           <Stack spacing={2} width={'100%'}>
@@ -78,15 +76,28 @@ const Login = () => {
               sx={{ '& .MuiFormLabel': { top: 0 } }}
               label="Số điện thoại"
               name="phoneNumber"
-              size="medium"
+              size="small"
             />
-            <RHFTextField sx={{ '& .MuiFormLabel': { top: 0 } }} label="Mật khẩu" name="password" size="medium" />
+            <RHFTextField
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              label={'Mật khẩu'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => dispatch(setShowPassword(!showPassword))} edge="end">
+                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Stack>
           <Stack direction={'row'} spacing={3} mt="30px">
             <LoadingButton type="submit" variant="contained" fullWidth sx={{ padding: '10px' }}>
               Đăng nhập
             </LoadingButton>
-            <LoadingButton variant="outlined" fullWidth sx={{ padding: '10px' }}>
+            <LoadingButton variant="outlined" fullWidth sx={{ padding: '10px' }} onClick={() => push('/register')}>
               Đăng ký
             </LoadingButton>
           </Stack>

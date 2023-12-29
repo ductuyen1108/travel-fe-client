@@ -1,3 +1,5 @@
+import { IAvatar } from '@/app/(web)/profile/common/interface';
+
 export interface ICurrent {
   id: number;
   phoneNumber: string;
@@ -9,5 +11,5 @@ export interface ICurrent {
   userId: number;
   tierPoint: number;
   address: string;
-  avatar: string;
+  avatar: IAvatar;
 }

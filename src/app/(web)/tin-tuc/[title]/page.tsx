@@ -4,15 +4,17 @@ import { Box, Grid } from '@mui/material';
 import Hero from './components/Hero';
 import NewsDetails from './components/NewsDetails';
 import Container from '@/common/config/container';
-import SubcribeForm from './components/SubcribeForm';
 import ListNewsByTopic from './components/ListNewsByTopics';
 import ConnectUs from './components/ConnectUs';
 import { useGetNewsDetails } from '../common/hooks/useGetNewsDetails';
+import Navbar from '@/common/components/navbar';
+import Footer from '@/common/components/footer';
 
 const Page = ({ params }: { params: { title: string } }) => {
   const { newsDetailsData } = useGetNewsDetails(params.title);
   return (
     <section>
+      <Navbar />
       <Hero hero={newsDetailsData} />
       <Container sx={{ my: '50px' }}>
         <Grid container columnSpacing={5} rowSpacing={3}>
@@ -27,6 +29,7 @@ const Page = ({ params }: { params: { title: string } }) => {
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </section>
   );
 };

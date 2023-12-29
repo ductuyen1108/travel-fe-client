@@ -8,7 +8,7 @@ export const getProfile = () => {
 
 export const editProfile = (params: IDataFormEditProfile) => axiosClient.put(API_PROFILE, params);
 
-export const eidtAvatarProfile = (imageId: number) => axiosClient.patch(`${API_PROFILE}/avatar`, imageId);
+export const eidtAvatarProfile = (params: { imageId: number }) => axiosClient.patch(`${API_PROFILE}/avatar`, params);
 
 export const changePasswordProfile = (params: IChangePassword) =>
   axiosClient.patch(`${API_PROFILE}/update-password`, params);

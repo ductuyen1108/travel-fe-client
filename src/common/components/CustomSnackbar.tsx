@@ -40,10 +40,11 @@ export const CustomSnackbar = forwardRef<HTMLDivElement, CustomContentProps>(({ 
           >
             <Image
               src={
-                (props?.variant === 'error' && ICONS_ALERT.error) ||
-                (props?.variant === 'info' && ICONS_ALERT.info) ||
-                (props?.variant === 'success' && ICONS_ALERT.success) ||
-                (props?.variant === 'warning' && ICONS_ALERT.warning)
+                (props?.variant === 'error' && '/images/icon-alert/icon_error.svg') ||
+                (props?.variant === 'info' && '/images/icon-alert/icon_error.svg') ||
+                (props?.variant === 'success' && '/images/icon-alert/icon_success.svg') ||
+                (props?.variant === 'warning' && '/images/icon-alert/icon_warning.svg') ||
+                ''
               }
             />
           </Box>

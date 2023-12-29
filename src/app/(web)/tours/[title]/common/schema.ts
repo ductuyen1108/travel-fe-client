@@ -12,10 +12,10 @@ export const bookTourSchema = yup.object().shape({
 
 export const userReviewSchema = yup.object().shape({
   reviewContent: yup.string().required('Vui lòng nhập nội dung đánh giá'),
-  accommodation: yup.number().required(),
-  destination: yup.number().required(),
-  meals: yup.number().required(),
-  transport: yup.number().required(),
-  valueForMoney: yup.number().required(),
-  overall: yup.number().required(),
+  accommodation: yup.number().required('Vui lòng chọn số sao theo đánh giá của bạn'),
+  destination: yup.number().required('Vui lòng chọn số sao theo đánh giá của bạn'),
+  meals: yup.number().required('Vui lòng chọn số sao theo đánh giá của bạn'),
+  transport: yup.number().required('Vui lòng chọn số sao theo đánh giá của bạn'),
+  valueForMoney: yup.number().required('Vui lòng chọn số sao theo đánh giá của bạn'),
+  overall: yup.number().required('Vui lòng chọn số sao theo đánh giá của bạn'),
 });
