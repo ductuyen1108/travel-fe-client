@@ -29,6 +29,7 @@ export interface IUserReviews {
   id: number;
   tourReviewName: string;
   reviewContent: string;
+  createdAt: string;
   UserReviewDetail: {
     id: number;
     accommodation: number;

@@ -28,7 +28,7 @@ const NewsCreatedByUser = () => {
             Nhạc của Vũ. được nhiều người dùng để cầu hôn.
           </Typography>
           <Typography sx={{ fontSize: '16px', color: GRAY_800, fontWeight: 500 }}>
-            Nhạc của Vũ. được nhiều người dùng để cầu hôn. Và đây là cách "Hoàng Tử Indie" cầu hôn vợ của mình.
+            Nhạc của Vũ. được nhiều người dùng để cầu hôn. Và đây là cách cầu hôn vợ của mình.
           </Typography>
           <Typography sx={{ fontSize: '14px', color: GRAY_500, fontWeight: 500 }}>15/1/2024</Typography>
         </Stack>

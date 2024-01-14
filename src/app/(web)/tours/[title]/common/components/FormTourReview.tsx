@@ -11,12 +11,15 @@ import RHFRating from '@/common/components/hook-form/RHFRating';
 import { LoadingButton } from '@mui/lab';
 import { useUserReivew } from '../../../common/hooks/useUserReview';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
-import { useDispatch } from '@/common/redux/store';
+import { useDispatch, useSelector } from '@/common/redux/store';
 import { setShowModalLogin } from '@/common/components/navbar/common/slice';
+import { useQueryClient } from 'react-query';
+import { QUERY_KEYS } from '@/common/constants/queryKey.constants';
 
 const FormTourReview = ({ tourId }: { tourId?: number }) => {
-  const token = localStorage.getItem('token');
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
+  const { profile } = useSelector((state) => state.authLogin);
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const methods = useForm<ISubmitReview>({
     resolver: yupResolver(userReviewSchema),
@@ -33,10 +36,26 @@ const FormTourReview = ({ tourId }: { tourId?: number }) => {
   const {
     handleSubmit,
     formState: { errors, dirtyFields, isSubmitting },
+    reset,
   } = methods;
   const { mutate } = useUserReivew({
     onSuccess: () => {
       showSuccessSnackbar('Gửi đánh giá thành công');
+      reset({
+        accommodation: undefined,
+        destination: undefined,
+        reviewContent: '',
+        meals: undefined,
+        overall: undefined,
+        transport: undefined,
+        valueForMoney: undefined,
+      });
+      queryClient
+        .getQueryCache()
+        .findAll([QUERY_KEYS.TOUR_DETAILS])
+        .forEach(({ queryKey }) => {
+          queryClient.invalidateQueries(queryKey);
+        });
     },
     onError: () => {
       showErrorSnackbar('Bạn đã đánh giá tour du lịch này rồi');
@@ -55,7 +74,7 @@ const FormTourReview = ({ tourId }: { tourId?: number }) => {
         valueForMoney: data.valueForMoney,
       },
     };
-    if (token) {
+    if (profile) {
       mutate(dataReview);
     } else {
       dispatch(setShowModalLogin(true));

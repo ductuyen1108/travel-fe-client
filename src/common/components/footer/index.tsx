@@ -5,6 +5,7 @@ import { GRADIENT_COLOR, GRAY_100, GRAY_700 } from '@/common/constants/colors';
 import { DescPage } from '@/common/config/text';
 import { linkFooter } from './common/constant';
 import Image from 'next/image';
+import ModalSendMessage from './components/ModalSendMessage';
 
 const Footer = () => {
   return (
@@ -48,6 +49,7 @@ const Footer = () => {
                     {it.text}
                   </Typography>
                 ))}
+                <ModalSendMessage />
               </Box>
             </Grid>
           ))}

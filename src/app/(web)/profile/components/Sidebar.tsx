@@ -13,9 +13,11 @@ import useDeepEffect from '@/common/hooks/useDeepEffect';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
 import { useEditProfile } from '../common/hooks/useEditProfile';
 import ModalChangePassword from './ModalChangePassword';
+import { useSelector } from '@/common/redux/store';
 
 const SideBar = () => {
-  const { profileData, isLoadingData } = useGetProfile();
+  const { profile } = useSelector((state) => state.authLogin);
+  const { profileData } = useGetProfile(true);
   const [open, setOpen] = useState(false);
   const { useDeepCompareEffect } = useDeepEffect();
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
@@ -29,10 +31,10 @@ const SideBar = () => {
   });
   const methods = useForm<ISubmitEditProfile>({
     defaultValues: {
-      address: profileData?.address,
-      birthDate: profileData?.birthDate,
-      email: profileData?.email,
-      name: profileData?.name,
+      address: profile?.address,
+      birthDate: profile?.birthDate,
+      email: profile?.email,
+      name: profile?.name,
     },
   });
   const { handleSubmit, reset, watch } = methods;
@@ -44,7 +46,7 @@ const SideBar = () => {
   const onSubmit = (data: ISubmitEditProfile) => {
     const dataEdit: IDataFormEditProfile = {
       address: data.address,
-      avatarId: profileData?.avatar?.id || 0,
+      avatarId: profile?.avatar?.id || 0,
       birthDate: data.birthDate,
       districtId: data.districtId?.code,
       provinceId: data.provinceId?.code,
@@ -56,16 +58,16 @@ const SideBar = () => {
   };
 
   useDeepCompareEffect(() => {
-    if (profileData) {
+    if (profile) {
       const dataVN = {
-        address: profileData?.address,
-        birthDate: profileData?.birthDate,
-        email: profileData?.email,
-        name: profileData?.name,
+        address: profile?.address,
+        birthDate: profile?.birthDate,
+        email: profile?.email,
+        name: profile?.name,
       };
       reset(dataVN);
     }
-  }, [profileData]);
+  }, [profile]);
 
   const handleClickOpen = () => {
     setOpen(true);

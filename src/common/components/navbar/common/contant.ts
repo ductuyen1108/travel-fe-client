@@ -8,6 +8,6 @@ export const navigation = [
   { text: 'Trang chủ', path: '/', icon: HomeIcon },
   { text: 'Tours', path: '/tours', icon: TourIcon },
   { text: 'Tin tức', path: '/tin-tuc', icon: NewspaperIcon },
-  { text: 'Diễn đàn', path: '/dien-dan', icon: ConnectWithoutContactIcon },
+  /* { text: 'Diễn đàn', path: '/dien-dan', icon: ConnectWithoutContactIcon }, */
   { text: 'Về chúng tôi', path: '/ve-chung-toi', icon: InfoIcon },
 ];

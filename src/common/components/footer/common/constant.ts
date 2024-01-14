@@ -13,7 +13,6 @@ export const linkFooter = [
       { id: 1, text: 'Chính sách đặt tour' },
       { id: 2, text: 'Chính sách bảo mật' },
       { id: 3, text: 'Câu hỏi thường gặp' },
-      { id: 4, text: 'Phiếu góp ý' },
     ],
   },
 ];

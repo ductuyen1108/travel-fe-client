@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import Iconify from '@/common/components/iconify/Iconify';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { usePresignImg } from '@/common/hooks/usePresignImg';
+import { useGetProfile } from '../common/hooks/useGetProfile';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -28,6 +29,7 @@ interface Props {
 
 const UserInforHeader = ({ profileInfo }: Props) => {
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
+  const { profileData } = useGetProfile(true);
   const { handleUpload, isUploading } = usePresignImg();
   const { mutate: mutateEdit } = useEditAvatarProfile({
     onSuccess: () => {
@@ -60,14 +62,14 @@ const UserInforHeader = ({ profileInfo }: Props) => {
         alt="wall-paper"
         sx={{ objectFit: 'cover' }}
         width={'100%'}
-        height={'auto'}
+        height={'400px'}
       />
       <Container sx={{ position: 'absolute', bottom: -115, left: { sm: 110, xs: 0 } }}>
         <Stack direction={'row'} spacing={3} alignItems={'center'}>
           <Box position={'relative'}>
             <Box
               component={'img'}
-              src={profileInfo?.avatar?.url || '/images/luffy.jpg'}
+              src={profileData?.avatar?.url || '/images/avatar-pld.jpeg'}
               alt="wall-paper"
               sx={{
                 objectFit: 'cover',
@@ -95,7 +97,7 @@ const UserInforHeader = ({ profileInfo }: Props) => {
               </IconButton>
             </Tooltip>
           </Box>
-          <TitlePage text={profileInfo?.name || 'User update'} color="#212B36" />
+          <TitlePage text={profileData?.name || 'User update'} color="#212B36" />
         </Stack>
       </Container>
     </Stack>

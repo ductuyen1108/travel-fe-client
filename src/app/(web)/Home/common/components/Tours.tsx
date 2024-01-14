@@ -11,7 +11,7 @@ import TourItem from '@/app/(web)/tours/common/components/TourItem';
 import { useGetListTours } from '../hooks/usegetListTours';
 
 const Tours = () => {
-  const { listTourData, isLoading } = useGetListTours({ page: 1, limit: 4 });
+  const { listTourData, isLoading } = useGetListTours({});
   console.log('list tour', listTourData);
   return (
     <Box sx={{ my: '100px' }}>

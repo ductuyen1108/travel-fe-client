@@ -14,12 +14,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { schemaCreatePost } from '../common/schema';
 import { usePresignImg } from '@/common/hooks/usePresignImg';
 import { LoadingButton } from '@mui/lab';
+import { useQueryClient } from 'react-query';
+import { QUERY_KEYS } from '@/common/constants/queryKey.constants';
 
 const FormCreatePost = () => {
+  const queryClient = useQueryClient();
   const { showSuccessSnackbar, showErrorSnackbar } = useShowSnackbar();
   const { mutate: mutateCreate } = useCreatePost({
     onSuccess: () => {
       showSuccessSnackbar('Thêm mới bài viết thành công');
+      reset({ content: '', description: '', image: undefined, title: '' });
+      queryClient
+        .getQueryCache()
+        .findAll([QUERY_KEYS.LIST_POST])
+        .forEach(({ queryKey }) => {
+          queryClient.invalidateQueries(queryKey);
+        });
     },
     onError: () => {
       showErrorSnackbar('Thêm mới bài viết thất bại');
@@ -36,7 +46,8 @@ const FormCreatePost = () => {
     setValue,
     watch,
     clearErrors,
-    formState: { errors, dirtyFields },
+    reset,
+    formState: { errors, dirtyFields, isSubmitting },
   } = methods;
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -116,7 +127,7 @@ const FormCreatePost = () => {
           />
         </Stack>
         <Stack direction={'row'} alignItems={'center'} spacing={2} mt={2}>
-          <LoadingButton type="submit" variant="contained" fullWidth>
+          <LoadingButton loading={isSubmitting} type="submit" variant="contained" fullWidth>
             Tạo mới
           </LoadingButton>
           <LoadingButton variant="outlined" fullWidth>

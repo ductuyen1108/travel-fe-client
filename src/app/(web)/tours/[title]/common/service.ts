@@ -10,4 +10,4 @@ export const getListBookTour = (params: IParamsBookTour) => {
   return axiosClient.get<any, IResBookTour>(API_BOOK_TOUR, { params });
 };
 
-export const deleteBookTour = (id: number) => axiosClient.delete(`/customer/tour/cancel-book-tour${id}`);
+export const deleteBookTour = (id: number) => axiosClient.delete(`/customer/tour/cancel-book-tour/${id}`);

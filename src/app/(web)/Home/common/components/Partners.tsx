@@ -1,7 +1,6 @@
 import { Box, SxProps } from '@mui/material';
 import Image from 'next/image';
 import Marquee from 'react-fast-marquee';
-import Img1 from '@/../public/images/partners/logo-cadivi.jpg';
 import Img2 from '@/../public/images/partners/logo-jetstar.jpg';
 import Img3 from '@/../public/images/partners/logo-prudential.jpg';
 import Img4 from '@/../public/images/partners/logo-samsung.png';
@@ -14,7 +13,6 @@ const styledBoxImage: SxProps = {
 };
 
 const images = [
-  { id: 1, src: Img1 },
   { id: 2, src: Img2 },
   { id: 3, src: Img3 },
   { id: 4, src: Img4 },

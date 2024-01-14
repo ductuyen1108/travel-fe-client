@@ -10,13 +10,17 @@ import { useGetCurrent } from '../hooks/useGetCurrent';
 import Iconify from '@/common/components/iconify/Iconify';
 import useDeepEffect from '@/common/hooks/useDeepEffect';
 import ModalLogin from './ModalLogin';
+import { useGetProfile } from '@/app/(web)/profile/common/hooks/useGetProfile';
+import { useDispatch, useSelector } from '@/common/redux/store';
+import { setAccessToken, setProfile } from '@/app/(web)/login/common/auth.slice';
+import { setShowModalLogin } from '../slice';
 
 const NavMenu = () => {
-  const currentScrollPos = typeof window !== 'undefined' ? window.pageYOffset : 0;
   const pathName = usePathname();
   const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const { useDeepCompareEffect } = useDeepEffect();
+  const dispatch = useDispatch();
 
   useDeepCompareEffect(() => {
     const activeNav = navigation.find((navItem) => navItem.path === pathName);
@@ -27,14 +31,17 @@ const NavMenu = () => {
     }
   }, [pathName, navigation]);
 
-  const { currentData } = useGetCurrent();
+  const { profile } = useSelector((state) => state.authLogin);
+
+  console.log('profile', profile);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    dispatch(setAccessToken(''));
+    dispatch(setProfile(undefined));
     setAnchorElUser(null);
   };
 
@@ -44,26 +51,34 @@ const NavMenu = () => {
         <Link
           key={navItem.path}
           href={navItem.path}
-          className={
-            currentScrollPos > 0
-              ? pathName === navItem.path || activeNavItem === navItem.text
-                ? 'nav-active'
-                : 'nav-before'
-              : pathName === navItem.path || activeNavItem === navItem.text
-              ? 'nav-active'
-              : 'nav'
-          }
+          className={pathName === navItem.path || activeNavItem === navItem.text ? 'nav-active' : 'nav-before'}
           onClick={() => setActiveNavItem(navItem.text)}
         >
           {navItem.text}
         </Link>
       ))}
-      {currentData ? (
+      {profile ? (
+        <Link
+          href={'/dien-dan'}
+          className={pathName === '/dien-dan' || activeNavItem === 'Diễn đàn' ? 'nav-active' : 'nav-before'}
+          onClick={() => setActiveNavItem('Diễn đàn')}
+        >
+          Diễn đàn
+        </Link>
+      ) : (
+        <Typography
+          sx={{ color: '#000', fontWeight: 400, fontSize: '16px', cursor: 'pointer' }}
+          onClick={() => dispatch(setShowModalLogin(true))}
+        >
+          Diễn đàn
+        </Typography>
+      )}
+      {profile ? (
         <>
           <Box
             component={'img'}
-            src={currentData?.avatar?.url ? currentData?.avatar?.url : '/images/mudryk.jpg'}
-            alt={currentData?.name}
+            src={profile?.avatar?.url ? profile?.avatar?.url : '/images/avatar-pld.jpeg'}
+            alt={profile?.name}
             sx={{
               width: '40px',
               height: '40px',

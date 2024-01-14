@@ -15,7 +15,7 @@ interface TourItemProps {
   country: string;
   totalReviews: number;
   numberOfDays: number;
-  rate: number;
+  rate?: number;
 }
 
 const TourItem = ({ id, thumbnail, price, title, country, totalReviews, numberOfDays, rate }: TourItemProps) => {

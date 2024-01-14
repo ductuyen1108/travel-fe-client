@@ -5,6 +5,7 @@ import { ReduxProviders } from '@/common/redux/provider';
 import { Metadata } from 'next/dist/lib/metadata/types/metadata-interface';
 import NotistackProvider from '@/common/components/NotistackProvider';
 import Localization from '@/common/localization/Localization';
+import ScrollTopBtn from '@/common/components/ScrollTopBtn';
 
 export const metadata: Metadata = {
   title: 'DT Travel',
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Localization>
                 <body>
                   <main>{children}</main>
+                  <ScrollTopBtn />
                 </body>
               </Localization>
             </NotistackProvider>

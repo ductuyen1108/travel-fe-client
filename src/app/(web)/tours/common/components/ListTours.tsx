@@ -8,6 +8,9 @@ import { useSelector } from '@/common/redux/store';
 import TourLoading from './TourLoading';
 import { TitlePage } from '@/common/config/text';
 import { GRAY_800 } from '@/common/constants/colors';
+import { useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { convertCountDate } from '@/common/utils/convertData';
 
 const ListTours = () => {
   const { dataFilter } = useSelector((state) => state.tour);
@@ -16,7 +19,7 @@ const ListTours = () => {
     startDate: dataFilter.startDate,
     startPrice: dataFilter.startPrice,
     endPrice: dataFilter.endPrice,
-    limit: 9,
+    limit: 100,
   });
 
   return (
@@ -37,7 +40,7 @@ const ListTours = () => {
                 title={tour?.title}
                 country={tour?.city?.cityName}
                 totalReviews={tour?.userReviews?.length}
-                numberOfDays={5}
+                numberOfDays={convertCountDate(tour?.tourDetail?.startDate, tour?.tourDetail?.endDate) || 4}
               />
             </Grid>
           ))}
