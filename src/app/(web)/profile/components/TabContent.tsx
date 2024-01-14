@@ -6,8 +6,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import TourItem from '../../tours/common/components/TourItem';
-import { IconButton, Stack, Tooltip } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle, IconButton, Stack, Tooltip } from '@mui/material';
 import PostItem from '../../dien-dan/components/PostItem';
 import { useGetListPost } from '../../dien-dan/common/hooks/useGetListPost';
 import { useGetProfile } from '../common/hooks/useGetProfile';
@@ -15,25 +14,23 @@ import { useGetListBookTour } from '../common/hooks/useGetListBookTour';
 import PostItemLoading from '../../dien-dan/components/PostItemLoading';
 import Iconify from '@/common/components/iconify/Iconify';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
-import { useDeleteBookTour } from '../../tours/[title]/common/hooks/useDeleteBookTour';
 import { useDeletePost } from '../../dien-dan/common/hooks/useDeletePost';
 import EmptyData from '@/common/components/EmptyData';
+import TourBookItem from './TourBookItem';
+import { useSelector } from '@/common/redux/store';
 
 export default function TabContent() {
   const [value, setValue] = React.useState('1');
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
-  const { profileData } = useGetProfile();
-  const { dataNewsPost, isLoadingData } = useGetListPost({ userId: profileData?.userId || 0 });
+  const { profile } = useSelector((state) => state.authLogin);
+  const { dataNewsPost, isLoadingData } = useGetListPost({ userId: profile?.userId || 0 });
   const { listBookTourData, isLoadingBookTourData } = useGetListBookTour({});
 
-  const { mutate: mutateDeleteTour } = useDeleteBookTour({
-    onSuccess: () => {
-      showSuccessSnackbar('Xóa tour đã đặt thành công');
-    },
-    onError: () => {
-      showErrorSnackbar('Xóa tour đã đặt thất bại');
-    },
-  });
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const { mutate: mutateDeletePost } = useDeletePost({
     onSuccess: () => {
@@ -43,11 +40,6 @@ export default function TabContent() {
       showErrorSnackbar('Xóa bài viết thất bại');
     },
   });
-
-  const handleDeleteBookTour = (id: number) => {
-    console.log('id: ', id);
-    showSuccessSnackbar('Xóa tour đã đặt thành công');
-  };
 
   const handleDeletePost = (id: number) => {
     console.log('id: ', id);
@@ -75,8 +67,8 @@ export default function TabContent() {
               <EmptyData />
             ) : (
               dataNewsPost?.items?.map((item) => (
-                <Box position={'relative'}>
-                  <PostItem key={item.id} postDetail={item} />
+                <Box key={item.id} position={'relative'}>
+                  <PostItem postDetail={item} />
                   <Tooltip
                     sx={{
                       position: 'absolute',
@@ -85,10 +77,21 @@ export default function TabContent() {
                     }}
                     title="Xóa bài viết"
                   >
-                    <IconButton onClick={() => handleDeletePost(item.id)}>
+                    <IconButton onClick={() => setOpen(true)}>
                       <Iconify icon={'fluent:delete-12-regular'} color={'#333'} />
                     </IconButton>
                   </Tooltip>
+                  <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>{'Bạn có chắc chắn muốn xóa bài viết này?'}</DialogTitle>
+                    <DialogActions>
+                      <Button variant="contained" color="error" onClick={() => handleDeletePost(item.id)}>
+                        Xóa
+                      </Button>
+                      <Button variant="outlined" onClick={handleClose} autoFocus>
+                        Hủy
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Box>
               ))
             )}
@@ -100,31 +103,17 @@ export default function TabContent() {
               <EmptyData />
             ) : (
               listBookTourData?.items?.map((item) => (
-                <Box key={item?.id} position={'relative'}>
-                  <TourItem
-                    rate={4.5}
-                    id={item?.tour?.id}
-                    country={item?.tour?.city?.cityName}
-                    numberOfDays={5}
-                    price={item?.tour?.tourDetail?.price}
-                    thumbnail={item?.tour?.image?.url}
-                    title={item?.tour?.title}
-                    totalReviews={2}
-                  />
-                  {/* <IconButton
-                    sx={{
-                      background: 'linear-gradient(135deg, #FEB692 10%, #EA5455 100%)',
-                      position: 'absolute',
-                      top: 10,
-                      right: 10,
-                      borderRadius: '50%',
-                      ':hover': { background: 'linear-gradient(135deg, #FEB692 10%, #EA5455 100%)' },
-                    }}
-                    onClick={() => handleDeleteBookTour(item.id)}
-                  >
-                    <Iconify icon={'fluent:delete-12-regular'} color={'#fff'} />
-                  </IconButton> */}
-                </Box>
+                <TourBookItem
+                  key={item.id}
+                  prop={{
+                    email: item?.email,
+                    id: item?.id,
+                    name: item?.name,
+                    phoneNumber: item?.phoneNumber,
+                    status: 'PAID',
+                    tour: item?.tour,
+                  }}
+                />
               ))
             )}
           </Stack>

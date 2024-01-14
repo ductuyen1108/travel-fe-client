@@ -14,3 +14,4 @@ export const API_PAYMENT = '/payments';
 export const API_PROVINCE = '/external/address/provinces';
 export const API_DISTRICT = '/external/address/district';
 export const API_WARD = '/external/address/ward';
+export const API_CONTACT = '/customer/contact';

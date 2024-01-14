@@ -31,7 +31,9 @@ export default function RHFSelectItem({ name, defaultValue, options, ...other }:
           defaultValue={options.find((item) => item.id === defaultValue)}
         >
           {options.map((item) => (
-            <MenuItem value={item.id}>{item.name}</MenuItem>
+            <MenuItem key={item.id} value={item.id}>
+              {item.name}
+            </MenuItem>
           ))}
         </Select>
       )}

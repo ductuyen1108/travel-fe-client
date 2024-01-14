@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import storage from 'redux-persist/lib/storage';
+import storage from './storage';
 import authLoginReducer from '@/app/(web)/login/common/auth.slice';
 import loginReducer from '@/app/(web)/login/common/login.slice';
 import tourReducer from '@/app/(web)/Home/common/slice';

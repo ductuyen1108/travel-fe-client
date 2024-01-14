@@ -1,6 +1,6 @@
 import Container from '@/common/config/container';
 import { DescPage, TitlePage } from '@/common/config/text';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 const NumberShowcase = () => {
   return (
@@ -17,12 +17,6 @@ const NumberShowcase = () => {
               color="#fff"
             />
           </Box>
-        </Grid>
-        <Grid item md={12} sm={12} xs={12} container>
-          <Grid item md={6}>
-            <Box></Box>
-          </Grid>
-          <Grid item md={6}></Grid>
         </Grid>
       </Grid>
     </Box>

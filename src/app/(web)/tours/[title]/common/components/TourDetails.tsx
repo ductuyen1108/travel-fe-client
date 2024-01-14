@@ -5,8 +5,6 @@ import Iconify from '@/common/components/iconify/Iconify';
 import RatingReview from './RatingReview';
 import { ITourDetail, ITourItem } from '@/app/(web)/Home/common/interface';
 import { convertDate } from '@/common/utils/convertData';
-import { reduceRating } from '@/common/utils/reduceRating';
-import { useEffect, useState } from 'react';
 
 const styledStack: SxProps = {
   justifyContent: 'center',
@@ -29,11 +27,6 @@ interface Props {
 }
 
 const TourDetails = ({ details, title }: Props) => {
-  console.log('average rating', details?.averageRating);
-  const [averageRating, setAverageRating] = useState<any>(details?.averageRating);
-  useEffect(() => {
-    return setAverageRating(details?.averageRating);
-  }, [details?.averageRating]);
   return (
     <Stack spacing={3}>
       <Box>
@@ -125,12 +118,12 @@ const TourDetails = ({ details, title }: Props) => {
           </Typography>
           <Box sx={{ py: '30px', borderTop: '1px solid #dce0e0', borderBottom: '1px solid #dce0e0', mt: '10px' }}>
             <RatingReview
-              accomodation={averageRating?.accommodation}
-              destination={averageRating?.destination}
-              meals={averageRating?.meals}
-              transport={averageRating?.transport}
-              valueOfMoney={averageRating?.valueForMoney}
-              overall={averageRating?.overall}
+              accomodation={details?.averageRating?.accommodation}
+              destination={details?.averageRating?.destination}
+              meals={details?.averageRating?.meals}
+              transport={details?.averageRating?.transport}
+              valueOfMoney={details?.averageRating?.valueForMoney}
+              overall={details?.averageRating?.overall}
             />
           </Box>
         </Stack>

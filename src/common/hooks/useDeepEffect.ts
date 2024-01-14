@@ -16,9 +16,7 @@ export default function useDeepEffect() {
 
   function useDeepCompareEffect(callback: EffectCallback, dependencies: DependencyList) {
     if (!dependencies || !dependencies.length) {
-      throw new Error(
-        'useDeepCompareEffect should not be used with no dependencies. Use useEffect instead.'
-      );
+      throw new Error('useDeepCompareEffect should not be used with no dependencies. Use useEffect instead.');
     }
     return useEffect(callback, useDeepCompareMemoize(dependencies));
   }

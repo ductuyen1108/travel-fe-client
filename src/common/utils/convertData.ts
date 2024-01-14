@@ -1,5 +1,5 @@
 import slugify from 'slugify';
-import { format } from 'date-fns';
+import { format, differenceInDays, parseISO } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
 interface Props {
@@ -32,4 +32,28 @@ export const convertGender = (gender: string) => {
     default:
       return 'không xác định';
   }
+};
+
+export const convertStatusTour = (status: string) => {
+  switch (status.toUpperCase()) {
+    case 'UNPAID':
+      return 'Chưa thanh toán';
+    case 'PAID':
+      return 'Đã thanh toán';
+    default:
+      return 'Trạng thái không xác định';
+  }
+};
+
+export const convertCountDate = (startTime: string | null, endTime: string | null): number | null => {
+  if (startTime && endTime) {
+    const startDate = parseISO(startTime);
+    const endDate = parseISO(endTime);
+
+    const diffInDays = differenceInDays(endDate, startDate);
+
+    return diffInDays;
+  }
+
+  return null;
 };

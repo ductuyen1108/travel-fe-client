@@ -9,7 +9,7 @@ import MoreInfor from '../common/components/MoreInfor';
 import { ITourItem } from '@/app/(web)/Home/common/interface';
 
 interface Props {
-  details?: ITourItem;
+  details?: ITourItem | any;
 }
 
 const TourContent = ({ details }: Props) => {
@@ -23,8 +23,8 @@ const TourContent = ({ details }: Props) => {
             <FormTourReview tourId={details?.id} />
           </Grid>
           <Grid item sm={4} xs={12} sx={{ position: { md: 'sticky', sm: 'sticky', xs: 'static' }, top: 0 }}>
-            <TourSubmitForm price={details?.tourDetail?.price || 0} tourId={details?.id || 0} />
-            <MoreInfor />
+            <TourSubmitForm price={details?.tourDetail?.price || 0} tourId={details?.id || 0} title={details?.title} />
+            {/* <MoreInfor /> */}
           </Grid>
         </Grid>
       </Container>

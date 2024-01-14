@@ -1,6 +1,5 @@
 'use client';
 
-import ScrollTopBtn from '@/common/components/ScrollTopBtn';
 import { useGetTourDetails } from '../../Home/common/hooks/useGetTourDetails';
 import Hero from './components/Hero';
 import TourContent from './components/TourContent';
@@ -14,7 +13,6 @@ const Page = ({ params }: { params: { title: number } }) => {
       <Navbar />
       <Hero url={tourDetails?.image?.url || ''} />
       <TourContent details={tourDetails} />
-      <ScrollTopBtn />
       <Footer />
     </section>
   );

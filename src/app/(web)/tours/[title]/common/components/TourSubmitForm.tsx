@@ -10,14 +10,14 @@ import { FormProvider, RHFTextField } from '@/common/components/hook-form';
 import { useBookTour } from '../hooks/useBookTour';
 import useShowSnackbar from '@/common/hooks/useShowSnackbar';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from '@/common/redux/store';
+import { useDispatch, useSelector } from '@/common/redux/store';
 import { setShowModalLogin } from '@/common/components/navbar/common/slice';
 import { setDataPayment } from '@/app/(web)/thanh-toan/common/slice';
 import { randomText } from '@/common/utils/randomText';
 
-const TourSubmitForm = ({ price, tourId }: { price: number; tourId: number }) => {
+const TourSubmitForm = ({ price, tourId, title }: { price: number; tourId: number; title: string }) => {
   const { push } = useRouter();
-  const token = localStorage.getItem('token');
+  const { profile } = useSelector((state) => state.authLogin);
   const dispatch = useDispatch();
   const methods = useForm<ISubmitFormBookTour>({
     resolver: yupResolver(bookTourSchema),
@@ -32,27 +32,37 @@ const TourSubmitForm = ({ price, tourId }: { price: number; tourId: number }) =>
   const { mutate } = useBookTour({
     onSuccess: () => {
       showSuccessSnackbar('Đặt tour du lịch thành công!');
-      push(`/thanh-toan/${tourId}`);
-      reset();
+      push(`/thanh-toan/${price}`);
+      reset({ email: '', name: '', numberOfPeople: undefined, phoneNumber: '' });
     },
     onError: () => {
-      showErrorSnackbar('Bạn đã đặt tour này rồi!!!');
-      reset();
+      showErrorSnackbar('Đặt tour thất bại!');
+      reset({ email: '', name: '', numberOfPeople: undefined, phoneNumber: '' });
     },
   });
   const onSubmit = (data: ISubmitFormBookTour) => {
+    dispatch(
+      setDataPayment({
+        orderId: randomText(data.name),
+        orderInfo: title,
+        totalPeople: data.numberOfPeople,
+        userEmail: data.email,
+        userName: data.name,
+        userPhoneNumber: data.phoneNumber,
+      }),
+    );
     const dataBookTour: IBookTourForm = {
       tourId: tourId,
       numberOfPeople: data.numberOfPeople,
     };
-    if (token) {
+    if (profile) {
       mutate(dataBookTour);
     } else {
       dispatch(setShowModalLogin(true));
     }
   };
   return (
-    <Box>
+    <Stack sx={{ position: 'sticky', top: 0 }} spacing={2}>
       <Stack
         direction={'row'}
         justifyContent={'space-between'}
@@ -75,7 +85,15 @@ const TourSubmitForm = ({ price, tourId }: { price: number; tourId: number }) =>
           </LoadingButton>
         </Stack>
       </FormProvider>
-    </Box>
+      <Box
+        component={'img'}
+        sx={{ objectFit: 'cover', borderRadius: '8px', border: '1px solid #dce0e0' }}
+        src="/images/sales.png"
+        alt="sale"
+        width={'100%'}
+        height={'auto'}
+      />
+    </Stack>
   );
 };
 

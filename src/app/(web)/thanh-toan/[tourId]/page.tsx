@@ -5,18 +5,14 @@ import { GRAY_500, GRAY_600, GRAY_800, PRIMARY_LIGHT, PRIMARY_MAIN } from '@/com
 import { LoadingButton } from '@mui/lab';
 import { Box, Stack, Paper, Typography, Button, FormLabel } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { IDataPayment, ISubmitDataPayment } from '../common/interface';
+import { IDataPayment, IResPayment, ISubmitDataPayment } from '../common/interface';
 import { randomText } from '@/common/utils/randomText';
 import { useSelector } from '@/common/redux/store';
-import { IBookTour } from '../../tours/[title]/common/interface';
-
-interface Props {
-  tourBooked: IBookTour;
-}
+import { usePayment } from '../common/hooks/usePayment';
+import { useRouter } from 'next/navigation';
 
 const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
-  console.log('params nhaanj ', params.tourId);
-
+  const { push } = useRouter();
   const { dataPayment } = useSelector((state) => state.payment);
   const methods = useForm<ISubmitDataPayment>({
     defaultValues: dataPayment,
@@ -26,11 +22,18 @@ const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
     reset,
     formState: { isSubmitting, errors },
   } = methods;
+  const { mutate } = usePayment({
+    onSuccess: (result: IResPayment) => {
+      console.log('result', result);
+      push(result.payUrl);
+    },
+    onError: () => {},
+  });
   const onSubmit = (data: ISubmitDataPayment) => {
     const dataPaymenOnlinet: IDataPayment = {
       orderId: randomText(data.orderId),
       orderInfo: `dtTravel_${data.orderInfo}`,
-      amount: 50000,
+      amount: data.totalPeople >= 5 ? params.tourId * data.totalPeople * 0.9 : params.tourId * data.totalPeople,
       autoCapture: true,
       lang: 'vi',
       extraData: '',
@@ -52,6 +55,8 @@ const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
         },
       ],
     };
+    console.log('data thanh toan', dataPaymenOnlinet);
+    mutate(dataPaymenOnlinet);
   };
   return (
     <Stack
@@ -68,7 +73,7 @@ const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
         width={'100px'}
         height={'100px'}
         alt="momo-logo"
-        sx={{ borderRadius: '12px', position: 'absolute', top: 75 }}
+        sx={{ borderRadius: '12px', position: 'absolute', top: 75, zIndex: 100 }}
       />
 
       <Stack
@@ -76,7 +81,7 @@ const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
         component={Paper}
         elevation={2}
         padding={'55px 40px 40px 40px'}
-        sx={{ borderRadius: '10px' }}
+        sx={{ borderRadius: '10px', position: 'relative' }}
         alignItems={'center'}
         justifyContent={'center'}
         width={'60%'}
@@ -84,6 +89,14 @@ const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
         <Typography sx={{ fontSize: '20px', color: PRIMARY_MAIN, fontWeight: 600 }}>
           THANH TOÁN QUA VÍ ĐIỆN TỬ MOMO
         </Typography>
+        {dataPayment.totalPeople >= 5 && (
+          <Box
+            padding={2}
+            sx={{ background: '#FF173D', color: '#fff', position: 'absolute', borderRadius: '10px', top: 0, right: 10 }}
+          >
+            Đã giảm giá 10%
+          </Box>
+        )}
         <FormProvider methods={methods} style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3} direction={{ sm: 'row', xs: 'column' }}>
             <Stack spacing={2} width={'100%'} sx={{ border: '1px solid #dce0e0', borderRadius: '10px', padding: 2 }}>
@@ -114,12 +127,16 @@ const PaymentMomo = ({ params }: { params: { tourId: number } }) => {
             <Stack direction={'row'} spacing={2} alignItems={'center'} justifyContent={'flex-end'}>
               <Typography sx={{ fontSize: '30px', color: GRAY_800, fontWeight: 600 }}>Tổng tiền:</Typography>
               <Typography sx={{ fontSize: '30px', color: '#e84118', fontWeight: 600 }}>
-                {(39596000).toLocaleString('vi-VN')} đ
+                {(dataPayment.totalPeople >= 5
+                  ? params.tourId * dataPayment.totalPeople * 0.9
+                  : params.tourId * dataPayment.totalPeople
+                ).toLocaleString('vi-VN')}{' '}
+                đ
               </Typography>
             </Stack>
           </Stack>
           <Stack direction={'row'} spacing={4} mt={2}>
-            <Button variant="outlined" fullWidth>
+            <Button variant="outlined" fullWidth onClick={() => push('/')}>
               Hủy
             </Button>
             <LoadingButton type="submit" variant="contained" fullWidth sx={{}}>

@@ -8,7 +8,12 @@ export const useEditAvatarProfile = (callback: ICallback) => {
   return {
     ...useMutation(eidtAvatarProfile, {
       onSuccess: () => {
-        queryClient.invalidateQueries([QUERY_KEYS.PROFILE]);
+        queryClient
+          .getQueryCache()
+          .findAll([QUERY_KEYS.PROFILE])
+          .forEach(({ queryKey }) => {
+            queryClient.invalidateQueries(queryKey);
+          });
 
         callback.onSuccess && callback.onSuccess();
       },

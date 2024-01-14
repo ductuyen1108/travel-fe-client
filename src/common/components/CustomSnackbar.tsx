@@ -46,6 +46,7 @@ export const CustomSnackbar = forwardRef<HTMLDivElement, CustomContentProps>(({ 
                 (props?.variant === 'warning' && '/images/icon-alert/icon_warning.svg') ||
                 ''
               }
+              alt="Custom Alt Text"
             />
           </Box>
         </Stack>
@@ -59,3 +60,5 @@ export const CustomSnackbar = forwardRef<HTMLDivElement, CustomContentProps>(({ 
     </SnackbarContent>
   );
 });
+
+CustomSnackbar.displayName = 'CustomSnackbar';

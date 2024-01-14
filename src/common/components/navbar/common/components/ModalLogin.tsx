@@ -23,17 +23,21 @@ import { LoadingButton } from '@mui/lab';
 import { GRAY_500, GRAY_600 } from '@/common/constants/colors';
 import ModalRegister from './ModalRegister';
 import { setShowModalLogin } from '../slice';
+import { setAccessToken } from '@/app/(web)/login/common/auth.slice';
+import { useGetProfile } from '@/app/(web)/profile/common/hooks/useGetProfile';
 
 export default function ModalLogin() {
   const { push } = useRouter();
+  const { refetchDatauser } = useGetProfile(false);
   const { showErrorSnackbar, showSuccessSnackbar } = useShowSnackbar();
   const { showModalLogin } = useSelector((state) => state.modal);
   const { showPassword } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const { mutate, isLoading } = useLogin({
     onSuccess: (result: IResLogin) => {
-      localStorage.setItem('token', result?.accessToken);
       showSuccessSnackbar('Đăng nhập thành công');
+      dispatch(setAccessToken(result?.accessToken));
+      refetchDatauser();
       dispatch(setShowModalLogin(false));
     },
     onError: (err: any) => {

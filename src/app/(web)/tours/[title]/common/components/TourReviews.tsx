@@ -23,7 +23,7 @@ const TourReviews = ({ userReviews }: Props) => {
                 {item?.user?.customer?.name}
               </Typography>
               <Typography sx={{ fontSize: '11px', fontWeight: 500, color: '#999' }}>
-                {convertDate({ data: item?.user?.customer?.createdAt })}
+                {convertDate({ data: item?.createdAt })}
               </Typography>
               <Typography sx={{ fontSize: '15px', fontWeight: 300, color: '#000', py: '10px' }}>
                 {item.reviewContent}

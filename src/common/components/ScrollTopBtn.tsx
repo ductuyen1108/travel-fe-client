@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, IconButton } from '@mui/material';
 import Iconify from './iconify/Iconify';
 import { useEffect, useState } from 'react';
